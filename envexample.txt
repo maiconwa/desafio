@@ -1,0 +1,9 @@
+SECRET_KEY = 'MY_SECRET_KEY'
+
+# Database
+ENGINE='django.db.backends.postgresql'
+NAME='my_postgres_name'
+USER='my_postgres_user'
+PASSWORD='my_postgres_password'
+HOST='my_postgres_host'
+PORT='my_postgres_port'
