@@ -1,9 +1,9 @@
-SECRET_KEY = 'MY_SECRET_KEY'
+SECRET_KEY = 'django-insecure-@q$i6i*c0lb!1=iy!$$ej8!b7py5x&1v0a#i%h7#n4)w40tqq='
 
 # Database
 ENGINE='django.db.backends.postgresql'
-NAME='my_postgres_name'
-USER='my_postgres_user'
-PASSWORD='my_postgres_password'
-HOST='my_postgres_host'
-PORT='my_postgres_port'
+NAME='postgres'
+USER='postgres'
+PASSWORD='mypassword'
+HOST='localhost'
+PORT='5432'

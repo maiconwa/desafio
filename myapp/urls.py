@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import Home, FileUploadView
+from .views import FileUploadView, CheckCartaoView2
 
 urlpatterns = [
-    # path('hello/', hello_world, name='hello-world'),
-    path('', Home.as_view()),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
+    path('check/', CheckCartaoView2.as_view(), name='check_final'),
 ]
