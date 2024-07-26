@@ -119,7 +119,7 @@ Exemplo de body:
 Os dados são salvos no banco de dados, sendo que destes o cartão é criptografado para maior segurança:
 
 Exemplo dados salvos PostgreSql:
-![alt text](image/postgresql_body.png)
+![alt text](image/postgresql_data.png)
 
 Exemplo dados salvos SqLite:
 ![alt text](image/sqlite_data.png)
