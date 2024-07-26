@@ -162,6 +162,4 @@ cython_debug/
 #.idea/
 
 # Other files
-DESAFIO-HYPERATIVA.txt
-description.md
 secret.key
