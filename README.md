@@ -35,10 +35,10 @@ dados copiados para o arquivo .env:
 
 <li>Determinar o banco de dados a ser usado no arquivo settings.py em DATABASES. Por padrão para testes o django vem com sqlite configurado.</li>
 
-exemplo sqlite:
+Exemplo sqlite:
 ![alt text](image/sqlite_config.png)
 
-exemplo PostgreSql:
+Exemplo PostgreSql:
 ![alt text](image/postgre_config.png)
 
 <li>Com o ambiente virtual ativo é necessario executar as migrações:</li>
@@ -57,4 +57,61 @@ Ainda no terminal com o ambiente virutual ativo digite: python manage.py creates
 Ainda no terminal com o ambiente virtual ativo digite: python manage.py createsuperuser
 ![alt text](image/superuser.png)
 
+</ol>
+
+
+<h4>Como usar a API:</h4>
+São três endpoints:
 <ol>
+<li>Endpoint /api/token/:</li>
+    É utilizado para gerar o token JWT e o refresh.
+<li>Endpoint /api/upload/:</li>
+    É utilizado para enxiar o arquivo txt.
+<li>Endpoint /api/check/:</li>
+    É utilizado para enviar o número de um ou mais cartões e receber como resposta um identificador unico.
+</ol>
+<br>
+Observação geral:
+Os exemplos abaixo foram criados com o postman. Com exceção do endpoint /api/token/ os demais exigem que o token seja passado no Bearer Token.
+
+<ol>
+<li>Endpoint /api/token/ para conseguir um token JWT e o refresh:</li>
+
+Informar o user e a senha:
+![alt text](image/token.png)
+obs: Aqui foi utilizado o superusuario para o teste.
+
+<li>Endpoint /api/upload/ para envio do arquivo em formato txt:</li>
+
+Informar o token no bearer token em authorization:
+![alt text](image/access_upload.png)
+
+
+Informar no Body a key file e adicionar o arquivo de upload no value:
+![alt text](image/upload_body.png)
+
+
+O postman tem acesso limitado ao sistema para o upload de arquivos no body é necessário alterar as configurações ou colocar os arquivos na pasta files como o exemplo abaixo:
+![alt text](image/postman_local.png)
+
+<li>Endpoint /api/check/ para enviar um ou mais cartões e receber um identificador unico:</li>
+
+Assim como na chamada anterior é necessário informar o token no bearer token em authorization:
+![alt text](image/check_token.png)
+
+
+Nesta chamada é possivel informar um ou mais numeros de cartões e a resposta será um identificador unico:
+![alt text](image/check_body.png)
+
+Exemplo de body:
+
+[
+    {
+        "numero_cartao": "4456897999999999"
+    },
+    {
+        "numero_cartao": "4456897912999999"
+    }
+]
+
+</ol>
