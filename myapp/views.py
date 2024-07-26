@@ -7,6 +7,9 @@ from .models import FileApi
 from .serializers import CheckCartaoSerializer
 from .encrypt import load_key, encrypt_message, decrypt_message
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 dictionary = {"NOME": [],
               "DATA": [],
@@ -26,6 +29,7 @@ class FileUploadView(APIView):
         return FileApi.objects.all()
 
     def post(self, request, format=None):
+        logger.info('API request: %s %s' % (request.method, request.path))
         file_obj = request.FILES.get('file')
         if not file_obj:
             return Response({'message': 'No file provided'}, status=400)
@@ -90,6 +94,7 @@ class FileUploadView(APIView):
         # closing the file
         file_obj.close()
         # Process the file here
+        logger.info('API response: %s' % (Response))
         return Response({'message': 'File uploaded successfully'}, status=201)
 
 
@@ -97,6 +102,7 @@ class CheckCard(APIView):
     serializer_class = CheckCartaoSerializer
 
     def post(self, request, format=None):
+        logger.info('API request: %s %s' % (request.method, request.path))
         serializer = CheckCartaoSerializer(data=request.data, many=True)
         if serializer.is_valid():
             card_numbers = [item['numero_cartao'] for item in serializer.validated_data]
@@ -108,7 +114,8 @@ class CheckCard(APIView):
                 decrypted_card = str(decrypt_message((card.numero_cartao)[1:], load_key())).replace("b'", "").replace("'", "")
                 if decrypted_card in card_numbers:
                     decrypted_items.append(card.unique)
-
+            logger.info('API response: %s' % (Response))
             return Response(decrypted_items, status=200)
         else:
+            logger.info('API response: %s' % (Response))
             return Response(serializer.errors, status=400)
