@@ -21,6 +21,8 @@ API para cadastro e consulta de número de cartão completo:
 
 ![alt text](image/pip_install2.png)
 
+Observação: No VS code após instalar as dependencias as vezes é necessário fechar o terminal e o editor de código para que as dependencias sejam reconhecidas. 
+
 <li>copiar os dados do arquivo .envexample ou criar uma nova SECRET_KEY para o django e adicionar ao arquivo .env:</li>
 
 envexample
