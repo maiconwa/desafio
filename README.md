@@ -53,10 +53,7 @@ Para migrar: python .\manage.py migrate
 
 <li>Agora é preciso adicionar o primeiro usuário do sistema:</li>
 
-Ainda no terminal com o ambiente virutual ativo digite: python manage.py createsuperuser
-![alt text](image/migrate.png)
-
-Ainda no terminal com o ambiente virtual ativo digite: python manage.py createsuperuser
+Ainda no terminal com o ambiente virtual ativo é necessário criar o primeiro usuário do django digite: python manage.py createsuperuser
 ![alt text](image/superuser.png)
 
 </ol>
