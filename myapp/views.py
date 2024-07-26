@@ -2,10 +2,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 import pandas as pd
-from cryptography.fernet import Fernet
 
 from .models import FileApi
 from .serializers import CheckCartaoSerializer
+from .encrypt import load_key, encrypt_message, decrypt_message
 
 
 dictionary = {"NOME": [],
@@ -16,34 +16,7 @@ dictionary = {"NOME": [],
               "NUMCARTAO": []}
 
 
-def generate_key():
-    key = Fernet.generate_key()
-    with open("secret.key", "wb") as key_file:
-        key_file.write(key)
-
-
-def laod_key():
-    try:
-        open("secret.key", "rb").read()
-    except:
-        generate_key()
-    return open("secret.key", "rb").read()
-
-
-def encrypt_message(message, key):
-    encoded_message = message.encode()
-    f = Fernet(key)
-    encrypt_message = f.encrypt(encoded_message)
-    return encrypt_message
-
-
-def decrypt_message(encrypted_message, key):
-    f = Fernet(key)
-    decrypt_message_message = f.decrypt(encrypted_message)
-    return decrypt_message_message
-
-
-key_f = laod_key()
+key_f = load_key()
 
 
 class FileUploadView(APIView):
@@ -53,7 +26,9 @@ class FileUploadView(APIView):
         return FileApi.objects.all()
 
     def post(self, request, format=None):
-        file_obj = request.FILES['file']
+        file_obj = request.FILES.get('file')
+        if not file_obj:
+            return Response({'message': 'No file provided'}, status=400)
         fileContent = "None"
         new_file = []
         init = True
@@ -90,35 +65,50 @@ class FileUploadView(APIView):
                     dictionary["NUMLOTE"].append(data[i])
                     dictionary["NUMCARTAO"].append(data[i+1])
         data = pd.DataFrame.from_dict(dictionary)
-
         for i in data.values:
-            unique_l = str(i[1]) + str(i[2][4:]) + str(i[3]) + str(i[4])
-            unique_l = unique_l.replace('-', '')
-            FileApi.objects.create(nome=i[0], data=i[1], lote=i[2],
-                                   quantidade_registro=i[3],
-                                   numeracao_no_lote=i[4],
-                                   numero_cartao=encrypt_message(i[5], key_f),
-                                   unique=unique_l)
+            last = FileApi.objects.all().last()
+            if last is None:
+                unique_l = str(i[1]) + str(i[2][4:]) + str(i[3]) + str(i[4])
+                unique_l = unique_l.replace('-', '')
+                FileApi.objects.create(nome=i[0],
+                                       data=i[1],
+                                       lote=i[2],
+                                       quantidade_registro=i[3],
+                                       numeracao_no_lote=i[4],
+                                       numero_cartao=encrypt_message(i[5], key_f),
+                                       unique=unique_l)
+            else:
+                unique_l = str(last.pk) + str(i[1]) + str(i[2][4:]) + str(i[3]) + str(i[4])
+                unique_l = unique_l.replace('-', '')
+                FileApi.objects.create(nome=i[0],
+                                       data=i[1],
+                                       lote=i[2],
+                                       quantidade_registro=i[3],
+                                       numeracao_no_lote=i[4],
+                                       numero_cartao=encrypt_message(i[5], key_f),
+                                       unique=unique_l)
         # closing the file
         file_obj.close()
         # Process the file here
-        return Response({'message': 'File uploaded successfully'})
+        return Response({'message': 'File uploaded successfully'}, status=201)
 
 
-class CheckCartaoView2(APIView):
+class CheckCard(APIView):
     serializer_class = CheckCartaoSerializer
 
-    def post(self, request, format=None, many=True):
+    def post(self, request, format=None):
         serializer = CheckCartaoSerializer(data=request.data, many=True)
         if serializer.is_valid():
-            itens = []
-            all_products = FileApi.objects.all()
-            myValues = all_products.values_list()
-            for i in request.data:
-                card = str(i.get('numero_cartao'))
-                for i in myValues:
-                    new = str(decrypt_message(i[6][1:], key_f))
-                    new = new[1:].replace("'", "")
-                    if new == card:
-                        itens.append(i[7])
-        return Response(itens)
+            card_numbers = [item['numero_cartao'] for item in serializer.validated_data]
+            decrypted_items = []
+            all_cards = FileApi.objects.all()
+            print(card_numbers[0])
+
+            for card in all_cards:
+                decrypted_card = str(decrypt_message((card.numero_cartao)[1:], load_key())).replace("b'", "").replace("'", "")
+                if decrypted_card in card_numbers:
+                    decrypted_items.append(card.unique)
+
+            return Response(decrypted_items, status=200)
+        else:
+            return Response(serializer.errors, status=400)
