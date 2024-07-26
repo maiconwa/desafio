@@ -189,4 +189,9 @@ LOGGING = {
             "propagate": True,
         },
     },
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        },
+    },
 }
