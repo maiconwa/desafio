@@ -19,9 +19,6 @@ dictionary = {"NOME": [],
               "NUMCARTAO": []}
 
 
-key_f = load_key()
-
-
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser,)
 
@@ -79,7 +76,7 @@ class FileUploadView(APIView):
                                        lote=i[2],
                                        quantidade_registro=i[3],
                                        numeracao_no_lote=i[4],
-                                       numero_cartao=encrypt_message(i[5], key_f),
+                                       numero_cartao=encrypt_message(i[5], load_key()),
                                        unique=unique_l)
             else:
                 unique_l = str(last.pk) + str(i[1]) + str(i[2][4:]) + str(i[3]) + str(i[4])
@@ -89,7 +86,7 @@ class FileUploadView(APIView):
                                        lote=i[2],
                                        quantidade_registro=i[3],
                                        numeracao_no_lote=i[4],
-                                       numero_cartao=encrypt_message(i[5], key_f),
+                                       numero_cartao=encrypt_message(i[5], load_key()),
                                        unique=unique_l)
         # closing the file
         file_obj.close()
