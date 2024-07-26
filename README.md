@@ -66,7 +66,7 @@ São três endpoints:
 <li>Endpoint /api/token/:</li>
     É utilizado para gerar o token JWT e o refresh.
 <li>Endpoint /api/upload/:</li>
-    É utilizado para enxiar o arquivo txt.
+    É utilizado para enviar o arquivo txt.
 <li>Endpoint /api/check/:</li>
     É utilizado para enviar o número de um ou mais cartões e receber como resposta um identificador unico.
 </ol>
@@ -115,3 +115,15 @@ Exemplo de body:
 ]
 
 </ol>
+
+Os dados são salvos no banco de dados, sendo que destes o cartão é criptografado para maior segurança:
+
+Exemplo dados salvos PostgreSql:
+![alt text](image/postgresql_body.png)
+
+Exemplo dados salvos SqLite:
+![alt text](image/sqlite_data.png)
+
+
+Os dados de todas as requisições sçao salvos em um arquivo de log na pasta logs com o nome de arquivo django.log
+
