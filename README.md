@@ -1,21 +1,45 @@
-# desafio
+# Desafio
 
 API para cadastro e consulta de número de cartão completo:
 
-<h4>Setup do ambiente:</h4>
+<h4>Preparação do ambiente:</h4>
 
 <ol>
 
 <li>Criar um arquivo .env:</li>
+
 ![alt text](image/add_env.png)
 
-<li>Criar uma pasta de ambiente virtual do python com python -m venv venv no windows ou python3 -m venv venv no linux:</li>
+<li>Para criar o ambiente virtual do python digite no terminal:</li>
+<br>
+Windows
+
+    python -m venv venv
+
+Linux & Mac
+
+    python3 -m venv venv
+
 ![alt text](image/create_venv.png)
 
-<li>Ativar o ambiente virtual no cmd venv\Scripts\activate.bat, no powershell venv\Scripts\Activate.ps1 ou no linux source myvenv/bin/activate</li>
+<li>Ative o ambiente virtual:</li>
+<br>
+Windows:
+
+    # In cmd.exe
+    venv\Scripts\activate.bat
+    # In PowerShell
+    venv\Scripts\Activate.ps1
+
+Linux and MacOS:
+
+    $ source myvenv/bin/activate
+
 ![alt text](image/activate_venv.png)
 
-<li>Dentro da pasta desafio é preciso instalar as dependencias do arquivo requirements.txt usando o terminal com o comando pip install -r .\requirements.txt</li>
+<li>Dentro da pasta desafio é preciso instalar as dependencias do arquivo requirements.txt usando o terminal com o comando:
+    
+    pip install -r .\requirements.txt</li>
 
 ![alt text](image/pip_install1.png)
 
@@ -23,79 +47,121 @@ API para cadastro e consulta de número de cartão completo:
 
 Observação: No VS code após instalar as dependencias as vezes é necessário fechar o terminal e o editor de código para que as dependencias sejam reconhecidas. 
 
-<li>copiar os dados do arquivo .envexample ou criar uma nova SECRET_KEY para o django e adicionar ao arquivo .env:</li>
+<li>Copiar os dados do arquivo .envexample ou criar uma nova SECRET_KEY para o django e adicionar ao arquivo .env:</li>
 
-envexample
+Envexample:
+
 ![alt text](image/add_envexample.png)
 
-criar uma nova SECRET_KEY:
-Com ambiente virtual ativado digite: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+Criar uma nova SECRET_KEY:
+
+    python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+    
 ![alt text](image/new_secret.png)
 
-dados copiados para o arquivo .env:
+Dados copiados para o arquivo .env:
+
 ![alt text](image/env_config.png)
 
 <li>Determinar o banco de dados a ser usado no arquivo settings.py em DATABASES. Por padrão para testes o django vem com sqlite configurado.</li>
 
 Exemplo sqlite:
+
 ![alt text](image/sqlite_config.png)
 
 Exemplo PostgreSql:
+
 ![alt text](image/postgre_config.png)
 
 <li>Com o ambiente virtual ativo é necessario executar as migrações:</li>
 
-Para criar as migrações digite: python .\manage.py makemigrations
+Para criar as migrações digite: 
+
+    python .\manage.py makemigrations
+    
 ![alt text](image/makemigrations.png)
 
-Para migrar: python .\manage.py migrate
+Para migrar:
+
+    python .\manage.py migrate
+    
 ![alt text](image/migrate.png)
 
-<li>Agora é preciso adicionar o primeiro usuário do sistema:</li>
+<li>Com o ambiente virtual ativo é necessário criar o primeiro usuário do django digite:</li>
 
-Ainda no terminal com o ambiente virtual ativo é necessário criar o primeiro usuário do django digite: python manage.py createsuperuser
+    python manage.py createsuperuser
+    
 ![alt text](image/superuser.png)
 
-</ol>
+<li>Para iniciar o django com o ambiente virtual ativo digite no terminal:</li>
 
 
-<h4>Como usar a API:</h4>
-São três endpoints:
-<ol>
-<li>Endpoint /api/token/:</li>
-    É utilizado para gerar o token JWT e o refresh.
-<li>Endpoint /api/upload/:</li>
-    É utilizado para enviar o arquivo txt.
-<li>Endpoint /api/check/:</li>
-    É utilizado para enviar o número de um ou mais cartões e receber como resposta um identificador unico.
-</ol>
+    python manage.py runserver
+
 <br>
+
+</ol>
+
+<h4>Como usar os endpoints:</h4>
+
+<ol>
+    
+<li>/api/token/: É utilizado para gerar o token JWT e o refresh.</li>
+        
+<br>
+
+<li>/api/upload/: É utilizado para enviar o arquivo txt.</li>
+    
+<br>
+    
+<li>/api/check/: É utilizado para enviar o número de um ou mais cartões e receber como resposta um identificador unico.</li>
+    
+<br>
+    
+</ol>
+
+<strong>IMPORTANTE: Os dados de todas as requisições são salvos em um arquivo de log na pasta logs com o nome de arquivo django.log</strong>
+
+<br>
+
 Observação geral:
+
+<br>
+
 Os exemplos abaixo foram criados com o postman. Com exceção do endpoint /api/token/ os demais exigem que o token seja passado no Bearer Token.
 
+<br>
+
 <ol>
+    
 <li>Endpoint /api/token/ para conseguir um token JWT e o refresh:</li>
 
+
 Informar o user e a senha:
+
 ![alt text](image/token.png)
 obs: Aqui foi utilizado o superusuario para o teste.
 
 <li>Endpoint /api/upload/ para envio do arquivo em formato txt:</li>
-
+<br>
 Informar o token no bearer token em authorization:
+
 ![alt text](image/access_upload.png)
 
 
 Informar no Body a key file e adicionar o arquivo de upload no value:
+
 ![alt text](image/upload_body.png)
 
 
 O postman tem acesso limitado ao sistema para o upload de arquivos no body é necessário alterar as configurações ou colocar os arquivos na pasta files como o exemplo abaixo:
+
 ![alt text](image/postman_local.png)
 
 <li>Endpoint /api/check/ para enviar um ou mais cartões e receber um identificador unico:</li>
-
+<br>
 Assim como na chamada anterior é necessário informar o token no bearer token em authorization:
+
 ![alt text](image/check_token.png)
 
 
@@ -104,25 +170,26 @@ Nesta chamada é possivel informar um ou mais numeros de cartões e a resposta s
 
 Exemplo de body:
 
-[
-    {
-        "numero_cartao": "4456897999999999"
-    },
-    {
-        "numero_cartao": "4456897912999999"
-    }
-]
+    [
+        {
+            "numero_cartao": "4456897999999999"
+        },
+        {
+            "numero_cartao": "4456897912999999"
+        }
+    ]
 
 </ol>
 
 Os dados são salvos no banco de dados, sendo que destes o cartão é criptografado para maior segurança:
 
 Exemplo dados salvos PostgreSql:
+
 ![alt text](image/postgresql_data.png)
 
 Exemplo dados salvos SqLite:
+
 ![alt text](image/sqlite_data.png)
 
 
-Os dados de todas as requisições sçao salvos em um arquivo de log na pasta logs com o nome de arquivo django.log
-
+Agradeço a atenção
