@@ -37,9 +37,9 @@ Linux and MacOS:
 
 ![alt text](image/activate_venv.png)
 
-<li>Dentro da pasta desafio é preciso instalar as dependencias do arquivo requirements.txt usando o terminal com o comando:
+<li>Dentro da pasta desafio é preciso instalar as dependencias do arquivo requirements.txt usando o terminal com o comando:</li>
     
-    pip install -r .\requirements.txt</li>
+    pip install -r .\requirements.txt
 
 ![alt text](image/pip_install1.png)
 
