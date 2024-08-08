@@ -190,6 +190,3 @@ Exemplo dados salvos PostgreSql:
 Exemplo dados salvos SqLite:
 
 ![alt text](image/sqlite_data.png)
-
-
-Agradeço a atenção
